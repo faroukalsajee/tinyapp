@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/faroukalsajee/tinyapp/issues"
   },
-  "homepage": "https://github.com/faroukalsajee/tinyapp#readme"
+  "homepage": "https://github.com/faroukalsajee/tinyapp#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
