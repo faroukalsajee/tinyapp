@@ -1,10 +1,11 @@
 /* eslint-disable no-undef */
 const express = require("express");
 const bodyParser = require("body-parser");
-
-app.use(bodyParser.urlencoded({extended: true}));
 const app = express();
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
+
+app.use(bodyParser.urlencoded({extended: false}));
+
 
 app.set("view engine", "ejs");
 
@@ -41,7 +42,7 @@ app.post("/urls", (req, res) => {
   console.log(req.body);  // Log the POST request body to the console
   res.send("Ok");         // Respond with 'Ok' (we will replace this)
 });
-app.get('/u/:shortURL', (req, res) => {
+app.get("/u/:shortURL", (req, res) => {
   let shortURL = req.params.shortURL;
   if (verifyShortUrl(shortURL, urlDatabase)) {
     const longURL = urlDatabase[shortURL].longURL;
@@ -49,4 +50,5 @@ app.get('/u/:shortURL', (req, res) => {
   } else {
     res.status(404).send('Does not exist');
   }
+  res.redirect(longURL);
 });
