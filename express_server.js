@@ -9,7 +9,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(cookie());
 
-
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
@@ -50,4 +49,7 @@ app.get("/urls/:shortURL", (req, res) => {
   } else {
     res.send('does not exist');
   }
+});
+app.listen(PORT, () => {
+  console.log(`Example app listening at http://localhost:${PORT}`);
 });
