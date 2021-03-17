@@ -53,3 +53,10 @@ app.get("/urls/:shortURL", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Example app listening at http://localhost:${PORT}`);
 });
+// new url is added to be shown with all urls
+app.post("/urls", (req, res) => {
+  const shortURL = generateShortURL();
+  const newURL = req.body.longURL;
+  urlDatabase[shortURL] = newURL;
+  res.redirect(`/urls/${shortURL}`);
+});
