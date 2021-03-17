@@ -80,9 +80,31 @@ app.post("/register", (req, res) => {
     res.cookie('user_id', newUser.id);
     res.redirect('/urls');
   }
-  // console.log(userDatabase);
+  console.log(userDatabase);
 });
 app.get("/login", (req, res) => {
   templateVars = { current_user: currentUser(req.cookies['user_id']) };
   res.render("login", templateVars);
+});
+app.post("/login", (req, res) => {
+  const emailUsed = req.body['email-address'];
+  const pwdUsed = req.body['password'];
+  if (fetchUserInfo(emailUsed, userDatabase)) {
+    const password = fetchUserInfo(emailUsed, userDatabase).password;
+    const id = fetchUserInfo(emailUsed, userDatabase).id;
+    if (password !== pwdUsed) {
+      res.status(403).send('Error 403... re-enter your password');
+    } else {
+      res.cookie('user_id', id);
+      res.redirect('/urls');
+    }
+  } else {
+    res.status(403).send('Error 403... email not found');
+  }
+});
+
+// endpoint to logout
+app.post("/logout", (req, res) => {
+  res.clearCookie('user_id');
+  res.redirect('/urls');
 });
