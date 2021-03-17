@@ -1,9 +1,10 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 const express = require("express");
 const app = express();
 const PORT = 8080; // default port 8080
 const bodyParser = require("body-parser");
-const cookie = require('cookie-parser')
+const cookie = require('cookie-parser');
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(cookie());
@@ -34,7 +35,7 @@ app.get("/urls", (req, res) => {
 
 // new url is created
 app.get("/urls/new", (req, res) => {
-  let templateVars = { username: req.cookies['username']}
+  let templateVars = { username: req.cookies['username']};
   res.render("urls_new", templateVars);
 });
 
