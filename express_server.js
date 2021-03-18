@@ -6,15 +6,29 @@ const app = express();
 const PORT = 8080;
 const bodyParser = require("body-parser");
 const cookie = require('cookie-parser');
+const morgan = require('morgan');
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(cookie());
+app.use(morgan('tiny'));
+
+const {verifyShortUrl, randomString, checkIfAvail, addUser, fetchUserInfo} = require('./helperFunctions');
 
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
 const userDatabase = {
+// };
+// const checkIfAvail  =   (email, userDatabase) => {
+//   if (email === userDatabase) {
+//     return userDatabase[ids]['This email is already registered'];}
+//     else {
+//       return
+
+  //if the email -the perameter of the function- is inside the user database, we return true, otherwise we return false
+  // in order to check the user data base, we are going to loop over the user database to check each individual email to find a match.
+
 };
 
 const currentUser = cookie => {
@@ -72,6 +86,7 @@ app.post("/urls", (req, res) => {
   const shortURL = randomString();
   const newURL = req.body.longURL;
   urlDatabase[shortURL] = newURL;
+  console.log('test',shortURL);
   res.redirect(`/urls/${shortURL}`);
 });
 
@@ -121,7 +136,7 @@ app.post("/register", (req, res) => {
     res.cookie('user_id', newUser.id);
     res.redirect('/urls');
   }
-  // console.log(userDatabase)
+  console.log(userDatabase);
 });
 
 app.get("/login", (req, res) => {

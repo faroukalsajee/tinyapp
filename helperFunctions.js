@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
 // helper functions
 const verifyShortUrl = (URL, database) => {
   return database[URL];
@@ -24,16 +22,16 @@ const generateRandomString = () => {
 const randomString = () => {
   let randomString = '';
   while (randomString.length < 6) {
-    randomString += generateRandomString;
+    randomString += generateRandomString();
   }
   return randomString;
 };
 
 
 //helpfer function: to check if emails are registered
-const checkIfAvail = (newVal, database) => {
-  for (user in database) {
-    if (database[user]['email-address'] === newVal) {
+const checkIfAvail = (email, database) => {
+  for (email in database) {
+    if (database[email]['email-address'] === email) {
       return false;
     }
   }
@@ -41,7 +39,7 @@ const checkIfAvail = (newVal, database) => {
 };
 
 //helper function: add user if available
-const addUser = (newUser, database) => {
+const addUser = (newUser, userDatabase) => {
   const newUserId = randomString();
   newUser.id = newUserId;
   userDatabase[newUserId] = newUser;
@@ -49,9 +47,9 @@ const addUser = (newUser, database) => {
 };
 
 const fetchUserInfo = (email, database) => {
-  for (key in database) {
-    if (database[key]['email-address'] === email) {
-      return database[key];
+  for (email in database) {
+    if (database[email]['email-address'] === email) {
+      return database[email];
     }
   }
 };
