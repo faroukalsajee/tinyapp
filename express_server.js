@@ -124,6 +124,9 @@ app.post("/register", (req, res) => {
     res.status(400).send('This email is already registered');
   } else {
     newUser = addUser(req.body, userDatabase);
+    console.log("Ranfffgg-----", newUser);
+    console.log("Ranfffgg-----", userDatabase);
+
     res.cookie('user_id', newUser.id);
     res.redirect('/urls');
   }
@@ -138,6 +141,8 @@ app.get("/login", (req, res) => {
 app.post("/login", (req, res) => {
   const emailUsed = req.body['email-address'];
   const pwdUsed = req.body['password'];
+  console.log('rreedd', req.body);
+  console.log('>>e>>', userDatabase);
   if (fetchUserInfo(emailUsed, userDatabase)) {
     const password = fetchUserInfo(emailUsed, userDatabase).password;
     const id = fetchUserInfo(emailUsed, userDatabase).id;
