@@ -15,19 +15,10 @@ app.use(morgan('tiny'));
 const {verifyShortUrl, randomString, checkIfAvail, addUser, fetchUserInfo} = require('./helperFunctions');
 
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
+  i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" }
 };
 const userDatabase = {
-// };
-// const checkIfAvail  =   (email, userDatabase) => {
-//   if (email === userDatabase) {
-//     return userDatabase[ids]['This email is already registered'];}
-//     else {
-//       return
-
-  //if the email -the perameter of the function- is inside the user database, we return true, otherwise we return false
-  // in order to check the user data base, we are going to loop over the user database to check each individual email to find a match.
 
 };
 
