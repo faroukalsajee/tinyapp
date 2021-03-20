@@ -7,6 +7,8 @@ const PORT = 8080;
 const bodyParser = require("body-parser");
 const cookie = require('cookie-parser');
 const morgan = require('morgan');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(cookie());
@@ -113,6 +115,7 @@ app.get("/register", (req, res) => {
   res.render("urls_register", templateVars);
 });
 
+//registerUser
 app.post("/register", (req, res) => {
   const {password} = req.body;
   const email = req.body['email-address'];
@@ -123,9 +126,14 @@ app.post("/register", (req, res) => {
   } else if (!checkIfAvail(email, userDatabase)) {
     res.status(400).send('This email is already registered');
   } else {
+    const salt = bcrypt.genSaltSync(saltRounds);
+    const hash = bcrypt.hashSync(password, salt);
+    // console.log('allep>?????????<<??>>>', hash);
+    req.body.password = hash;
     newUser = addUser(req.body, userDatabase);
     console.log("Ranfffgg-----", newUser);
     console.log("Ranfffgg-----", userDatabase);
+  
 
     res.cookie('user_id', newUser.id);
     res.redirect('/urls');
@@ -135,26 +143,23 @@ app.post("/register", (req, res) => {
 
 app.get("/login", (req, res) => {
   templateVars = { current_user: currentUser(req.cookies['user_id']) };
-  res.render("login", templateVars);
+  return res.render("login", templateVars);
 });
 
+// loginUser
 app.post("/login", (req, res) => {
   const emailUsed = req.body['email-address'];
   const pwdUsed = req.body['password'];
-  console.log('rreedd', req.body);
-  console.log('>>e>>', userDatabase);
-  if (fetchUserInfo(emailUsed, userDatabase)) {
-    const password = fetchUserInfo(emailUsed, userDatabase).password;
-    const id = fetchUserInfo(emailUsed, userDatabase).id;
-    if (password !== pwdUsed) {
-      res.status(403).send('Error 403... re-enter your password');
-    } else {
-      res.cookie('user_id', id);
-      res.redirect('/urls');
-    }
-  } else {
-    res.status(403).send('Error 403... email not found');
+  const user = fetchUserInfo(emailUsed, userDatabase);
+  if (!user) {
+    return res.status(403).send('Error 403... user not found');
   }
+  const checkPassword = bcrypt.compareSync(pwdUsed , user.password); // returns false
+  if (!checkPassword) {
+    return res.status(403).send('Incorrect Password! Please try again!');
+  }
+  res.cookie('user_id', user.id);
+  return res.redirect('/urls');
 });
 
 // endpoint to logout
