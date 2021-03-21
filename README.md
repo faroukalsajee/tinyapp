@@ -1,6 +1,8 @@
 # TinyApp Project
 ### **TinyApp** is a web application built with Node and Express that allows authenticated users to shorten long URLs. Created as the second project for Lighthouse Labs, Full Stack Web Development Bootcamp.
 ## Final Product
+!["Screenshot of URLs page"](https://github.com/faroukalsajee/tinyapp/blob/master/docs/Screen%20Shot%202021-03-21%20at%201.55.57%20AM.png?raw=true)
+!["Screenshot of register page"](https://github.com/faroukalsajee/tinyapp/blob/master/docs/Screen%20Shot%202021-03-21%20at%201.56.39%20AM.png?raw=true)
 ## Learning milestones
 * Creating a NodeJS application, using EJS templates and ExpressJS
 * Managing routes and creating a RESTful API
