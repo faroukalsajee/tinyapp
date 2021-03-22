@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 /* eslint-disable camelcase */
+// TinyApp
+// Author: Farouk (@faroukalsajee)
 const express = require("express");
 const app = express();
 const PORT = 8080;
@@ -9,16 +11,30 @@ const cookie = require('cookie-parser');
 const morgan = require('morgan');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.set("view engine", "ejs");
 app.use(cookie());
 app.use(morgan('tiny'));
 
-const {verifyShortUrl, randomString, checkIfAvail, addUser, fetchUserInfo} = require('./helperFunctions');
+const {
+  verifyShortUrl,
+  randomString,
+  checkIfAvail,
+  addUser,
+  fetchUserInfo
+} = require('./helperFunctions');
 
 const urlDatabase = {
-  b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
-  i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" }
+  b6UTxQ: {
+    longURL: "https://www.tsn.ca",
+    userID: "aJ48lW"
+  },
+  i3BoGr: {
+    longURL: "https://www.google.ca",
+    userID: "aJ48lW"
+  }
 };
 const userDatabase = {
 
@@ -31,7 +47,6 @@ const currentUser = cookie => {
     }
   }
 };
-
 
 app.get("/", (req, res) => {
   res.send("Hello!");
@@ -47,7 +62,10 @@ app.get("/hello", (req, res) => {
 
 // displaying all urls
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase, current_user: currentUser(req.cookies['user_id']) };
+  let templateVars = {
+    urls: urlDatabase,
+    current_user: currentUser(req.cookies['user_id'])
+  };
   res.render("urls_index", templateVars);
 });
 
@@ -58,7 +76,9 @@ app.get("/urls/new", (req, res) => {
     res.redirect('/login');
   }
 
-  let templateVars = { current_user: current_user };
+  let templateVars = {
+    current_user: current_user
+  };
   res.render("urls_new", templateVars);
 });
 
@@ -67,7 +87,11 @@ app.get("/urls/:shortURL", (req, res) => {
   let shortURL = req.params.shortURL;
   if (verifyShortUrl(shortURL, urlDatabase)) {
     let longURL = urlDatabase[req.params.shortURL];
-    let templateVars = { shortURL: shortURL, longURL: longURL, current_user: currentUser(req.cookies['user_id'])};
+    let templateVars = {
+      shortURL: shortURL,
+      longURL: longURL,
+      current_user: currentUser(req.cookies['user_id'])
+    };
     res.render("urls_show", templateVars);
   } else {
     res.send('does not exist');
@@ -79,7 +103,7 @@ app.post("/urls", (req, res) => {
   const shortURL = randomString();
   const newURL = req.body.longURL;
   urlDatabase[shortURL] = newURL;
-  console.log('test',shortURL);
+  console.log('test', shortURL);
   res.redirect(`/urls/${shortURL}`);
 });
 
@@ -111,13 +135,17 @@ app.post("/urls/:shortURL/edit", (req, res) => {
 
 // registration form
 app.get("/register", (req, res) => {
-  templateVars = { current_user: currentUser(req.cookies['user_id'])};
+  templateVars = {
+    current_user: currentUser(req.cookies['user_id'])
+  };
   res.render("urls_register", templateVars);
 });
 
 //registerUser
 app.post("/register", (req, res) => {
-  const {password} = req.body;
+  const {
+    password
+  } = req.body;
   const email = req.body['email-address'];
   if (email === '') {
     res.status(400).send('Email is required');
@@ -128,12 +156,11 @@ app.post("/register", (req, res) => {
   } else {
     const salt = bcrypt.genSaltSync(saltRounds);
     const hash = bcrypt.hashSync(password, salt);
-    // console.log('allep>?????????<<??>>>', hash);
     req.body.password = hash;
     newUser = addUser(req.body, userDatabase);
     console.log("Ranfffgg-----", newUser);
     console.log("Ranfffgg-----", userDatabase);
-  
+
 
     res.cookie('user_id', newUser.id);
     res.redirect('/urls');
@@ -142,7 +169,9 @@ app.post("/register", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  templateVars = { current_user: currentUser(req.cookies['user_id']) };
+  templateVars = {
+    current_user: currentUser(req.cookies['user_id'])
+  };
   return res.render("login", templateVars);
 });
 
@@ -154,7 +183,7 @@ app.post("/login", (req, res) => {
   if (!user) {
     return res.status(403).send('Error 403... user not found');
   }
-  const checkPassword = bcrypt.compareSync(pwdUsed , user.password); // returns false
+  const checkPassword = bcrypt.compareSync(pwdUsed, user.password); // returns false
   if (!checkPassword) {
     return res.status(403).send('Incorrect Password! Please try again!');
   }
