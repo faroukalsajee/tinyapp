@@ -48,7 +48,6 @@ const addUser = (newUser, userDatabase) => {
 
 const fetchUserInfo = (email, database) => {
   for (let eachRecord in database) {
-    // if (eachRecord.email['email-address'] === email) {
     if (database[`${eachRecord}`]['email-address'] === email) {
       console.log('recordFound.............................');
       return {id: eachRecord, ...database[`${eachRecord}`]};
