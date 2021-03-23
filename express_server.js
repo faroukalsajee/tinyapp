@@ -20,26 +20,12 @@ app.use(morgan('tiny'));
 const {urlsForUser, checkOwner, currentUser, verifyShortUrl, randomString, checkIfRegistered, addUser, fetchUserInfo} = require('./helperFunctions');
 
 const urlDatabase = {
-  // b6UTxQ: {
-  //   longURL: "https://www.tsn.ca",
-  //   userID: "aJ48lW"
-  // },
-  // i3BoGr: {
-  //   longURL: "https://www.google.ca",
-  //   userID: "aJ48lW"
-  // }
+  
 };
 const userDatabase = {
 
 };
 
-// const currentUser = cookie => {
-//   for (let ids in userDatabase) {
-//     if (cookie === ids) {
-//       return userDatabase[ids]['email-address'];
-//     }
-//   }
-// };
 
 app.get('/', (req, res) => {
   const user = currentUser(req.session.userId, userDatabase);
@@ -188,9 +174,8 @@ app.post('/register', (req, res) => {
   }
 });
 
-// endpoint to logout
-app.post("/logout", (req, res) => {
-  res.clearCookie('user_id');
+app.post('/logout', (req, res) => {
+  req.session = null;
   res.redirect('/urls');
 });
 
