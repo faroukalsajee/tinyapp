@@ -1,8 +1,11 @@
 // helper functions
+const bcrypt = require('bcrypt');
 const verifyShortUrl = (URL, database) => {
   return database[URL];
 };
-
+const checkOwner = (userId, urlID, database) => {
+  return userId === database[urlID].userID;
+};
 
 const generateRandomString = () => {
   const lowerCase = 'abcdefghijklmnopqrstuvwxyz';
@@ -27,11 +30,18 @@ const randomString = () => {
   return randomString;
 };
 
+const currentUser = (cookie, database) => {
+  for (let ids in database) {
+    if (cookie === ids) {
+      return database[ids].email;
+    }
+  }
+};
 
 //helpfer function: to check if emails are registered
-const checkIfAvail = (email, database) => {
-  for (email in database) {
-    if (database[email]['email-address'] === email) {
+const checkIfRegistered = (newValue, database) => {
+  for (let user in database) {
+    if (database[user].email === newValue) {
       return false;
     }
   }
@@ -39,22 +49,35 @@ const checkIfAvail = (email, database) => {
 };
 
 //helper function: add user if available
-const addUser = (newUser, userDatabase) => {
+const addUser = (newUser, database) => {
   const newUserId = randomString();
   newUser.id = newUserId;
-  userDatabase[newUserId] = newUser;
+  newUser.password = bcrypt.hashSync(newUser.password, 10);
+  database[newUserId] = newUser;
   return newUser;
 };
 
 const fetchUserInfo = (email, database) => {
-  for (let eachRecord in database) {
-    if (database[`${eachRecord}`]['email-address'] === email) {
-      console.log('recordFound.............................');
-      return {id: eachRecord, ...database[`${eachRecord}`]};
+  for (let key in database) {
+    if (database[key].email === email) {
+      return database[key];
     }
   }
+  return undefined;
+};
+
+//this is to return url where user id is equal to the id of current user
+const urlsForUser = (id, database) => {
+  let currentUserId = id;
+  let usersURLs = {};
+  for (let key in database) {
+    if (database[key].userID === currentUserId) {
+      usersURLs[key] = database[key];
+    }
+  }
+  return usersURLs;
 };
 
 
 
-module.exports = { verifyShortUrl, randomString, checkIfAvail, addUser, fetchUserInfo };
+module.exports = {checkOwner, urlsForUser, currentUser,verifyShortUrl, randomString, checkIfRegistered, addUser, fetchUserInfo };
