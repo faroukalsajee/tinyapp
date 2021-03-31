@@ -16,11 +16,10 @@
 1. Open up your favourtie browser and head over to : http://localhost:8080/
 1. Enjoy the app
 ## Dependencies
-* Node.js: v10.20.1
-* Express: ^4.17.1
-* EJS: ^2.7.4
-* bcrypt: 5.0.0
-* body-parser: ^1.19.0
-* cookie-session: ^1.4.0
-* method-override: ^3.0.0
+* Node.js
+* Express
+* bcrypt
+* body-parser
+* cookie-session
+* method-override
 #### If you have any feedback or want to get in touch, feel free to send me an email at faroukalsajee@gmail.com
